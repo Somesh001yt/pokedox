@@ -4,11 +4,12 @@ import PokemonPage from './PokemonPage';
 import Navigation from '../components/Navigation';
 import TuneIcon from '@mui/icons-material/Tune';
 import Loading from '../components/Loading';
+import FilterModal from './FilterModal';
 
 const HomePage = () => {
  const [pokemon , setPokemon] = useState([]);
  const [loading , setLoading] = useState(true);
-
+const [filter, setFilter] = React.useState(false);
 const getPokemonList = async () =>{
   let pokemonArray = [];
 
@@ -25,6 +26,7 @@ const pokemonFilter = (name) =>{
   if(name ===''){
     getPokemonList();
   }
+
   for(let i in pokemon){
     if(pokemon[i].data.name.includes(name)){
       filterPokemon.push(pokemon[i])
@@ -43,23 +45,25 @@ useEffect(()=>{
   getPokemonList();
 },[])
 
+const handleOpen = () => setFilter(true);
+
 
   return (
     <div className='bg-[#f8f8f8]'>
+       <FilterModal filter={filter} setFilter={setFilter} />
        <Navigation pokemonFilter={pokemonFilter}/>
-       <div className='flex ml-6  '>
-        < TuneIcon/>
+       <div className='flex m-6 cursor-pointer' onClick={handleOpen}>
+        <TuneIcon/>
        <p className='ml-2'>Filter</p>
        </div>
   {loading ? (
   <Loading/>
   ) : (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-1 ml-24 mr-24  ">
-   { pokemon.map((item) => (
-      <div key={item.id}>
-     <PokemonPage pokemon={item.data} />
+    <div className="grid justify-items-center grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-5 mx-10">
 
-        {/* ... */}
+   { pokemon.map((item) => (
+     <div key={item.id}>
+     <PokemonPage pokemon={item.data} />
       </div>
     ))}
     </div>
