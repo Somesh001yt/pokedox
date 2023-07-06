@@ -25,7 +25,7 @@ function FilterModal(props) {
   const handleClose = () => setFilter(false);
 
   // Extracting the types from the data
-  const types = data.types.map(type => type.type.name);
+  // const types = data.types.map(type => type.type.name);
 
   return (
     <div>
@@ -46,11 +46,11 @@ function FilterModal(props) {
               Choose a Filter
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              <ul>
+              {/* <ul>
                 {types.map((type, index) => (
                   <li key={index}>{type}</li>
                 ))}
-              </ul>
+              </ul> */}
             </Typography>
           </Box>
         </Fade>
