@@ -5,22 +5,24 @@ import Navigation from '../components/Navigation';
 import TuneIcon from '@mui/icons-material/Tune';
 import Loading from '../components/Loading';
 import FilterModal from './FilterModal';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 const HomePage = () => {
  const [pokemon , setPokemon] = useState([]);
+ const [orginal,setOrginal] = useState(pokemon)
  const [loading , setLoading] = useState(true);
- const [hasMore , setHasMore] = useState(true);
- const [page, setPage] = useState(1);
- const [dataSource , setDataSource] = useState(Array.from({length : 12}));
-const [filter, setFilter] = React.useState(false);
+const [filter, setFilter] = useState(false);
+
 const getPokemonList = async () =>{
   let pokemonArray = [];
 
-  for(let i =1; i<= 300; i++){
+
+  for(let i =1; i<= 151; i++){
     pokemonArray.push(await getPokemonData(i));
+  
   }
-  console.log(pokemonArray);
+  setOrginal(pokemonArray)
+
+
   setPokemon(pokemonArray);
   setLoading(false);
 }
@@ -36,23 +38,22 @@ const pokemonFilter = (name) =>{
       filterPokemon.push(pokemon[i])
     }
   }
-  console.log(filterPokemon)
+
   setPokemon(filterPokemon);
 }
 
-const fetchmoreData = () => {
-  if (pokemon.length >= page * 12) {
-    setTimeout(() => {
-      setPage((prevPage) => prevPage + 1);
-    }, 500);
-  } else {
-    setHasMore(false);
-  }
-};
 const getPokemonData = async (id) =>{
   const res = await axiox.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
   return res;
 }
+
+
+function otherFilter(value){
+const temp1 = []
+
+const temp = orginal.filter( currentElement => currentElement.data.types.filter( param => param.type.name == value ? temp1.push(currentElement) : false) ) 
+setPokemon(temp1);
+  }
 
 
 
@@ -60,14 +61,12 @@ useEffect(()=>{
   getPokemonList();
 },[])
 
-
-
 const handleOpen = () => setFilter(true);
 
 
   return (
     <div className='bg-[#f8f8f8]'>
-       <FilterModal filter={filter} setFilter={setFilter} />
+       <FilterModal  otherFilter={otherFilter} filter={filter} setFilter={setFilter}  />
        <Navigation pokemonFilter={pokemonFilter}/>
        <div className='flex m-6 cursor-pointer' onClick={handleOpen}>
         <TuneIcon/>
@@ -76,20 +75,14 @@ const handleOpen = () => setFilter(true);
   {loading ? (
   <Loading/>
   ) : (
-   
-<InfiniteScroll dataLength= {dataSource.length}
-next={fetchmoreData}
-hasMore = {hasMore}
-loader= {<p>Loading...</p>}>
- <div className="grid justify-items-center grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-5 mx-10">
-{ pokemon.map((item) => (
+    <div className="grid justify-items-center grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-5 mx-10">
+
+   { pokemon.map((item) => (
      <div key={item.id}>
      <PokemonPage pokemon={item.data} />
       </div>
     ))}
     </div>
-</InfiniteScroll>
-  
   )}
 </div>
 

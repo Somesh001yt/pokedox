@@ -12,20 +12,19 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  backgroundColor: 'white',
+  backgroundColor:'white',
   p: 4,
-  borderRadius: '12px',
-  outline: '0px'
+  borderRadius:'12px',
+  outline:'0px'
 };
 
 function FilterModal(props) {
-  const { filter, setFilter, data } = props; // Assuming `data` contains the data you mentioned
-
+  const { filter, setFilter , otherFilter } = props;
   const handleOpen = () => setFilter(true);
-  const handleClose = () => setFilter(false);
-
-  // Extracting the types from the data
-  // const types = data.types.map(type => type.type.name);
+  const handleClose = (param) => {
+    setFilter(false)      
+    otherFilter(param);
+  };
 
   return (
     <div>
@@ -43,14 +42,26 @@ function FilterModal(props) {
         <Fade in={filter}>
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              Choose a Filter
+            <h1 className='text-xl font-bold my-2'>Choose a Filter</h1>
+               <div className='flex flex-col'>
+                <h1 className='mb-3 text-xl'>Type</h1>
+                <ul className='flex gap-x-8 gap-y-2 justify-between flex-wrap'>
+                  <li onClick={() => handleClose('fighting')} className='text-sm cursor-pointer hover:text-blue-500' >Fighting</li>
+                  <li onClick={() => handleClose('poison')} className='text-sm cursor-pointer hover:text-blue-500' >Poison</li>
+                  <li onClick={() => handleClose('ground')} className='text-sm cursor-pointer hover:text-blue-500' >Ground</li>
+                  <li onClick={() => handleClose('rock')} className='text-sm cursor-pointer hover:text-blue-500' >Rock</li>
+                  <li onClick={() => handleClose('bug')} className='text-sm cursor-pointer hover:text-blue-500' >Bug</li>
+                  <li onClick={() => handleClose('ghost')} className='text-sm cursor-pointer hover:text-blue-500' >Ghost</li>
+                  <li onClick={() => handleClose('fire')} className='text-sm cursor-pointer hover:text-blue-500' >Fire</li>
+                  <li onClick={() => handleClose('grass')} className='text-sm cursor-pointer hover:text-blue-500' >Grass</li>
+                  <li onClick={() => handleClose('water')} className='text-sm cursor-pointer hover:text-blue-500' >Water</li>
+                  <li onClick={() => handleClose('steel')} className='text-sm cursor-pointer hover:text-blue-500' >Steel</li>
+                </ul>
+               </div>
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              {/* <ul>
-                {types.map((type, index) => (
-                  <li key={index}>{type}</li>
-                ))}
-              </ul> */}
+            <ul>
+            </ul>
             </Typography>
           </Box>
         </Fade>
@@ -59,4 +70,4 @@ function FilterModal(props) {
   );
 }
 
-export default FilterModal;
+export default FilterModal
